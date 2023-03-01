@@ -18,4 +18,6 @@ public interface BooksRepository extends JpaRepository<Book, Integer> {
 	@Query(value = "SELECT * FROM Book b where b.author = :author", nativeQuery=true)
 	   public List<Book> findBooksByAuthorNative(@Param("author")  String author);
 
+	@Query(value = "SELECT * FROM Book b where b.genre = :genre", nativeQuery=true)
+	   public List<Book> findBooksByGenreNative(@Param("genre")  String genre);
 }

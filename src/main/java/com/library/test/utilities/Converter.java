@@ -10,11 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.library.test.dao.Book;
-import com.library.test.dao.Genre;
+import com.library.test.dao.Quantity;
 import com.library.test.dto.BooksDto;
-import com.library.test.model.BookGenre;
+import com.library.test.model.BookQuantity;
 import com.library.test.repository.BooksRepository;
-import com.library.test.repository.GenreRepository;
+import com.library.test.repository.QuantityRepository;
 
 @Service("converter")
 public class Converter {
@@ -23,7 +23,7 @@ public class Converter {
 	private BooksRepository booksRepository;
 	
 	@Autowired
-	private GenreRepository genreRepository;
+	private QuantityRepository quantityRepository;
 	
 	ModelMapper modelMapper = new ModelMapper();
 
@@ -43,38 +43,40 @@ public class Converter {
 	    return book;
 	}
 	
-	public String splitIntoBookAndGenre(List<BookGenre> bookAndGenre) throws ParseException {
-		Iterator<BookGenre> itr = bookAndGenre.iterator();
+	public String splitIntoBookAndGenre(List<BookQuantity> bookAndGenre) throws ParseException {
+		Iterator<BookQuantity> itr = bookAndGenre.iterator();
 		List<Book> bookDaoList = new ArrayList<Book>();
-		List<Genre> genreDaoList = new ArrayList<Genre>();
+		List<Quantity> quantityDaoList = new ArrayList<Quantity>();
 		while(itr.hasNext()) {
-			BookGenre bookGenre = itr.next();
+			BookQuantity bookQuantity = itr.next();
 			Book bookDao = new Book();
-		    bookDao.setIsbn(bookGenre.getIsbn());
-		    bookDao.setTitle(bookGenre.getTitle());
-		    bookDao.setAuthor(bookGenre.getAuthor());
-		    bookDaoList.add(bookDao);
+		    bookDao.setIsbn(bookQuantity.getIsbn());
+		    bookDao.setTitle(bookQuantity.getTitle());
+		    bookDao.setAuthor(bookQuantity.getAuthor());
+		    bookDao.setGenre(bookQuantity.getGenre());
+//		    bookDaoList.add(bookDao);
 		    
-		    Genre genreDao = new Genre();
-//		    genreDao.setBookId(bookGenre.getId());
-		    if(!bookGenre.getGenre().isBlank()) {
-		    	genreDao.setGenre(bookGenre.getGenre());
-		    }
-		    if(bookGenre.getTotal() != null) {
-		    	genreDao.setTotal(bookGenre.getTotal());
+		    Book book = booksRepository.save(bookDao);
+		    
+		    Quantity quantityDao = new Quantity();
+		    if(bookQuantity.getTotal() != null) {
+		    	quantityDao.setTotal(bookQuantity.getTotal());
 		    } else {
-		    	genreDao.setTotal(1);
+		    	quantityDao.setTotal(1);
 		    }
 		    //Can add more logic. For now total and available are same.
-		    if(bookGenre.getTotal() != null) {
-		    	genreDao.setAvailable(bookGenre.getTotal());
+		    if(bookQuantity.getTotal() != null) {
+		    	quantityDao.setAvailable(bookQuantity.getTotal());
 		    } else {
-		    	genreDao.setAvailable(1);
+		    	quantityDao.setAvailable(1);
 		    }
-		    genreDaoList.add(genreDao);
+		    quantityDao.setBook(book);
+		    quantityRepository.save(quantityDao);
+		    
+//		    quantityDaoList.add(quantityDao);
 		}
-		booksRepository.saveAll(bookDaoList);
-		genreRepository.saveAll(genreDaoList);
+//		booksRepository.saveAll(bookDaoList);
+//		quantityRepository.saveAll(quantityDaoList);
 	    
 	    return "Saved";
 	}

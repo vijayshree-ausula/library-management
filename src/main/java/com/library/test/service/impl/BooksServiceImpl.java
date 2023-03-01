@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.library.test.dao.Book;
-import com.library.test.dao.Genre;
+import com.library.test.dao.Quantity;
 import com.library.test.dto.BooksDto;
-import com.library.test.model.BookGenre;
+import com.library.test.model.BookQuantity;
 import com.library.test.repository.BooksRepository;
-import com.library.test.repository.GenreRepository;
+import com.library.test.repository.QuantityRepository;
 import com.library.test.service.BooksService;
 import com.library.test.utilities.Converter;
 
@@ -26,14 +26,14 @@ public class BooksServiceImpl implements BooksService {
 	private BooksRepository booksRepository;
 	
 	@Autowired
-	private GenreRepository genreRepository;
+	private QuantityRepository genreRepository;
 	
 	@Autowired 
 	Converter converter;
 	
 	@Override
 	@Transactional
-	public String saveAllBooks(List<BookGenre> books) {
+	public String saveAllBooks(List<BookQuantity> books) {
 		
 		 try {
 			converter.splitIntoBookAndGenre(books);
@@ -47,8 +47,8 @@ public class BooksServiceImpl implements BooksService {
 	public List<Book> getAllBooks() {
 		
 		List<Book> bookList = booksRepository.findAll();
-		List<Genre> genreList = genreRepository.findAll();
-		List<BookGenre> retList = new ArrayList<BookGenre>();
+		List<Quantity> genreList = genreRepository.findAll();
+		List<BookQuantity> retList = new ArrayList<BookQuantity>();
 		
 		
 		return null;

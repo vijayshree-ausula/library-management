@@ -1,8 +1,10 @@
 package com.library.test.model;
 
-public class BookGenre {
+public class BookQuantity {
 
-	private Integer id;
+	  private Integer id;
+	  
+	  private Integer book_id;
 
 	  private Integer isbn;
 
@@ -24,7 +26,15 @@ public class BookGenre {
 	    this.id = id;
 	  }
 
-	  public Integer getIsbn() {
+	  public Integer getBook_id() {
+		  return book_id;
+	  }
+
+	  public void setBook_id(Integer book_id) {
+		  this.book_id = book_id;
+	  }
+
+	public Integer getIsbn() {
 		  return isbn;
 	  }
 

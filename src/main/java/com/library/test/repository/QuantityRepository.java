@@ -7,11 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.library.test.dao.Genre;
+import com.library.test.dao.Quantity;
 
 @Repository
-public interface GenreRepository extends JpaRepository<Genre, Integer> {
-	@Query(value = "SELECT * FROM Genre g where g.genre = :genre", nativeQuery=true)
-	   public List<Genre> findBooksByGenreNative(@Param("genre")  String genre);
+public interface QuantityRepository extends JpaRepository<Quantity, Integer> {
+	
 
 }

@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.library.test.dao.Book;
-import com.library.test.dao.Genre;
+import com.library.test.dao.Quantity;
 import com.library.test.dto.BooksDto;
-import com.library.test.model.BookGenre;
+import com.library.test.model.BookQuantity;
 import com.library.test.repository.BooksRepository;
-import com.library.test.repository.GenreRepository;
+import com.library.test.repository.QuantityRepository;
 import com.library.test.service.BooksService;
 import com.library.test.utilities.Converter;
 
@@ -32,7 +32,7 @@ public class LibraryController {
 	BooksRepository booksRepository;
 	
 	@Autowired 
-	GenreRepository genreRepository;
+	QuantityRepository genreRepository;
 	
 	@Autowired 
 	BooksService booksService;
@@ -71,14 +71,14 @@ public class LibraryController {
 	}
 	
 	@GetMapping(path = "/genre")
-	public @ResponseBody Iterable<Genre> getBooksByGenre(@RequestParam String genre) {
+	public @ResponseBody Iterable<Book> getBooksByGenre(@RequestParam String genre) {
 		
-		return genreRepository.findBooksByGenreNative(genre);
+		return booksRepository.findBooksByGenreNative(genre);
 	}
 	  
 	
 	@PostMapping(path="/addBooks", headers = "Accept=application/json") 
-	public @ResponseBody String addNewBook(@RequestBody List<BookGenre> books) {
+	public @ResponseBody String addNewBook(@RequestBody List<BookQuantity> books) {
 
 		return booksService.saveAllBooks(books);
 	}
