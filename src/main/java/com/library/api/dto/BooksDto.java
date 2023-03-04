@@ -1,4 +1,4 @@
-package com.library.test.dto;
+package com.library.api.dto;
 
 import lombok.Getter;
 import lombok.Setter;

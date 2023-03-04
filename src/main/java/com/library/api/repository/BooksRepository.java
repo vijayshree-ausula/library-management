@@ -1,4 +1,4 @@
-package com.library.test.repository;
+package com.library.api.repository;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.library.test.dao.Book;
+import com.library.api.dao.Book;
 
 @Repository
 public interface BooksRepository extends JpaRepository<Book, Integer> {
@@ -20,4 +20,7 @@ public interface BooksRepository extends JpaRepository<Book, Integer> {
 
 	@Query(value = "SELECT * FROM Book b where b.genre = :genre", nativeQuery=true)
 	   public List<Book> findBooksByGenreNative(@Param("genre")  String genre);
+	
+	@Query(value = "SELECT * FROM Book b where b.title = :title", nativeQuery=true)
+	   public List<Book> findBooksByTitleNative(@Param("title")  String title);
 }
