@@ -1,4 +1,4 @@
-package com.library.test.dao;
+package com.library.api.dao;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -8,6 +8,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 @Entity 
 public class Book {
@@ -15,13 +17,18 @@ public class Book {
   @GeneratedValue(strategy=GenerationType.IDENTITY)
   private Integer id;
 
+//  @NotNull
   private Integer isbn;
 
+//  @NotEmpty
   private String title;
 
+//  @NotEmpty
   private String author;
   
   private String genre;
+  
+  private String status;
   
   @OneToOne(mappedBy = "book", orphanRemoval = true, cascade = CascadeType.PERSIST)
   @JsonManagedReference
@@ -67,7 +74,15 @@ public class Book {
 	  this.genre = genre;
   }
 
-  public Quantity getQuantity() {
+  public String getStatus() {
+	return status;
+}
+
+public void setStatus(String status) {
+	this.status = status;
+}
+
+public Quantity getQuantity() {
 	  return quantity;
   }
 
