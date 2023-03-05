@@ -9,10 +9,10 @@ Added functionality for the following:
 -> Added Member add and fetch functionality
 -> Added Issue book functionality
 -> Added Return book functionality
+-> Add logging. -> DONE
 
 Todo:
 -> Add unit tests for code coverage.
--> Add logging.
 -> Apply scalability concept.
 -> Add pagination.
 -> Add containerization.

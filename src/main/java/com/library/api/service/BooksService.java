@@ -8,7 +8,7 @@ import com.library.api.dao.Book;
 import com.library.api.dao.Issue;
 import com.library.api.dao.Member;
 import com.library.api.exception.BookNotAvailableException;
-import com.library.api.utilities.ValidList;
+import com.library.api.model.ValidList;
 
 import jakarta.validation.Valid;
 

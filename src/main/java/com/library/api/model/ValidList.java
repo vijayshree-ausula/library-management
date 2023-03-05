@@ -1,8 +1,6 @@
-package com.library.api.utilities;
+package com.library.api.model;
 
 import java.util.List;
-
-import com.library.api.model.Books;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
