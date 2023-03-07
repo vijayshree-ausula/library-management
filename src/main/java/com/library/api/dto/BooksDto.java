@@ -1,20 +1,17 @@
 package com.library.api.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public class BooksDto {
 	
-	@Getter
-	@Setter
+//	@Getter
+//	@Setter
 	private Integer isbn;
 	
-	@Getter
-	@Setter
+//	@Getter
+//	@Setter
 	private String title;
 	
-	@Getter
-	@Setter
+//	@Getter
+//	@Setter
 	private String author;
 	
 	private String genre;

@@ -44,22 +44,6 @@ public class Converter {
 	
 	ModelMapper modelMapper = new ModelMapper();
 
-	public BooksDto convertToDto(Book book) {
-		BooksDto bookDto = modelMapper.map(book, BooksDto.class);
-		bookDto.setIsbn(book.getIsbn());
-		bookDto.setAuthor(book.getAuthor());
-		bookDto.setTitle(book.getTitle());
-	    return bookDto;
-	}
-	
-	public Book convertToEntity(BooksDto bookDto) throws ParseException {
-	    Book book = modelMapper.map(bookDto, Book.class);
-	    book.setIsbn(bookDto.getIsbn());
-	    book.setAuthor(bookDto.getAuthor());
-	    book.setTitle(bookDto.getTitle());
-	    return book;
-	}
-
 	public List<Book> splitIntoBookAndGenre(ValidList books) throws ParseException {
 		Iterator<Books> itr = books.getBooks().iterator();
 		List<Book> bookList  = new ArrayList<Book>();

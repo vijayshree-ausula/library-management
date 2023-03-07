@@ -2,6 +2,9 @@ package com.library.api.model;
 
 import java.sql.Date;
 
+import lombok.Data;
+
+@Data
 public class Issue {
 
 	private Integer id;

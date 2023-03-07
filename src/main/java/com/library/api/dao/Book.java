@@ -1,5 +1,7 @@
 package com.library.api.dao;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -28,7 +30,8 @@ public class Book {
   
   private String genre;
   
-  private String status;
+  @ColumnDefault("status")
+  private String status = "Available";
   
   @OneToOne(mappedBy = "book", orphanRemoval = true, cascade = CascadeType.PERSIST)
   @JsonManagedReference
