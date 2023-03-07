@@ -11,7 +11,7 @@
 	<groupId>com.library</groupId>
 	<artifactId>com.library.api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>com.library</name>
 	<description>Library test project for Spring Boot</description>
 	<properties>
@@ -106,6 +106,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>library-management-system</finalName>
 	</build>
 
 </project>

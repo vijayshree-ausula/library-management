@@ -10,9 +10,11 @@ Added functionality for the following:
 -> Added Issue book functionality
 -> Added Return book functionality
 -> Add logging. -> DONE
+-> Added unit tests 
+-> Added Jacoco for code coverage
+-> Started Docker integration 
 
 Todo:
--> Add unit tests for code coverage.
 -> Apply scalability concept.
 -> Add pagination.
 -> Add containerization.
