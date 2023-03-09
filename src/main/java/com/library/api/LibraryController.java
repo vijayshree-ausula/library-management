@@ -31,7 +31,6 @@ import com.library.api.repository.BooksRepository;
 import com.library.api.repository.MemberRepository;
 import com.library.api.repository.QuantityRepository;
 import com.library.api.service.BooksService;
-import com.library.api.service.impl.BooksServiceImpl;
 import com.library.api.utilities.Converter;
 
 import jakarta.validation.Valid;
@@ -60,7 +59,7 @@ public class LibraryController {
 	@Autowired 
 	Converter converter;
 	
-	@GetMapping(path = "/all")
+	@GetMapping(path = "/allBooks")
 	public @ResponseBody Iterable<BooksDto> getAllBooks() {
 		LOGGER.debug("Returning all books");
 		List<Book> list = booksService.getAllBooks();
@@ -191,7 +190,7 @@ public class LibraryController {
 		return booksService.saveReturnBook(issue);
 	}
 	
-	@RequestMapping(path="/greeting")
+	@GetMapping(path = "/greeting")
 	public String getGreeting() {
 		return "Welcome to Library Management";
 	}

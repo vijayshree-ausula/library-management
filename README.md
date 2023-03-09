@@ -12,9 +12,9 @@ Added functionality for the following:
 -> Add logging. -> DONE
 -> Added unit tests 
 -> Added Jacoco for code coverage
--> Started Docker integration 
+-> Completed Docker integration 
+-> Added Swagger
 
 Todo:
 -> Apply scalability concept.
 -> Add pagination.
--> Add containerization.
