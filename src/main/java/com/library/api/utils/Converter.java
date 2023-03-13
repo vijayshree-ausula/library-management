@@ -1,10 +1,11 @@
-package com.library.api.utilities;
+package com.library.api.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -12,10 +13,12 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.library.api.dao.Book;
 import com.library.api.dao.Quantity;
+import com.library.api.dao.User;
 import com.library.api.dto.BooksDto;
 import com.library.api.exception.BookNotAvailableException;
 import com.library.api.model.Books;
@@ -26,6 +29,9 @@ import com.library.api.repository.BooksRepository;
 import com.library.api.repository.IssueRepository;
 import com.library.api.repository.MemberRepository;
 import com.library.api.repository.QuantityRepository;
+import com.library.api.repository.UserRepository;
+import com.library.api.repository.UserRoleRepository;
+import com.library.api.service.impl.MemberUserDetailsService;
 
 @Service("converter")
 public class Converter {
@@ -41,6 +47,15 @@ public class Converter {
 	
 	@Autowired
 	private IssueRepository issueRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private UserRoleRepository userRoleRepository;
+	
+	@Autowired
+	private MemberUserDetailsService userDetailsService;
 	
 	ModelMapper modelMapper = new ModelMapper();
 
@@ -79,10 +94,37 @@ public class Converter {
 	}
 	
 	public com.library.api.dao.Member saveMember(Member member) throws ParseException {
-		com.library.api.dao.Member memberDao = modelMapper.map(member, com.library.api.dao.Member.class);
-		com.library.api.dao.Member response = memberRepository.save(memberDao);
-	    return response;
+		 
+		 com.library.api.dao.Member memberDao = mapRequestToMemberDao(member);
+		 com.library.api.dao.Member response = memberRepository.save(memberDao);
+		 
+		 com.library.api.dao.User userDao = mapRequestToUserDao(member);
+		 com.library.api.dao.User userDaoResponse = userDetailsService.createUser(userDao);
+		 com.library.api.dao.User_Role userRoleDao = new com.library.api.dao.User_Role();
+		 userRoleDao.setRoleId(2);
+		 userRoleDao.setUser_id(userDaoResponse.getId());
+		 
+		 com.library.api.dao.User_Role userRoleDaoResponse = userRoleRepository.save(userRoleDao);
+		 
+		 return response;
 		
+	}
+	
+	private User mapRequestToUserDao(Member member) {
+		User userDao = new User();
+		userDao.setPassword(encodePassword(member.getPassword()));
+		userDao.setUname(member.getUsername());
+		return userDao;
+	}
+
+	private com.library.api.dao.Member mapRequestToMemberDao(Member member) {
+		com.library.api.dao.Member memberDao = new com.library.api.dao.Member();
+		memberDao.setEmail(member.getEmail());
+		memberDao.setAddress(member.getAddress());
+		memberDao.setName(member.getName());
+		memberDao.setPhone(member.getPhone());
+		memberDao.setStatus(member.getStatus());
+		return memberDao;
 	}
 	
 	public com.library.api.dao.Issue saveIssue(Issue issue) throws ParseException, BookNotAvailableException {
@@ -120,7 +162,7 @@ public class Converter {
 	}
 	
 	public String saveReturn(Issue issue) throws ParseException {
-//		com.library.api.dao.Issue issueDao = new com.library.api.dao.Issue();
+		
 		List<Book> books = booksRepository.findBooksByTitleNative(issue.getBookName());
 		Book book = books.iterator().next();
 		Integer bookId = book.getId();
@@ -128,6 +170,22 @@ public class Converter {
 		issueRepository.updateBookReturnByBookNameAndMemberIdNative(issue.getBookName(), issue.getMemberId());
 		quantityRepository.updateIncreaseQuantityByBookIdNative(bookId);
 	    return "Book has been returned";
+		
+	}
+	
+	String encodePassword(String password) {
+		
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		String encodedString = encoder.encode(password);
+		return encodedString;
+		
+	}
+	
+	String decodeToPassword(String encodedPassword) {
+		
+		byte[] decodedBytes = Base64.getDecoder().decode(encodedPassword);
+		String password = new String(decodedBytes);
+		return password;
 		
 	}
 	

@@ -20,7 +20,7 @@ import com.library.api.model.ValidList;
 import com.library.api.repository.BooksRepository;
 import com.library.api.repository.QuantityRepository;
 import com.library.api.service.BooksService;
-import com.library.api.utilities.Converter;
+import com.library.api.utils.Converter;
 
 import jakarta.transaction.Transactional;
 
@@ -38,6 +38,9 @@ public class BooksServiceImpl implements BooksService {
 	@Autowired 
 	Converter converter;
 	
+	@Autowired
+	MemberUserDetailsService userDetailsService;
+
 	@Override
 	@Transactional
 	public List<Book> saveAllBooks(ValidList books) {

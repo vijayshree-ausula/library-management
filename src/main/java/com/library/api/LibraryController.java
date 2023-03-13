@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,35 +32,34 @@ import com.library.api.repository.BooksRepository;
 import com.library.api.repository.MemberRepository;
 import com.library.api.repository.QuantityRepository;
 import com.library.api.service.BooksService;
-import com.library.api.utilities.Converter;
+import com.library.api.utils.Converter;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 
-
 @RestController
 @RequestMapping("/library/api")
 public class LibraryController {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(LibraryController.class);
-	
-	@Autowired 
+
+	@Autowired
 	BooksRepository booksRepository;
-	
-	@Autowired 
+
+	@Autowired
 	QuantityRepository quantityRepository;
-	
-	@Autowired 
+
+	@Autowired
 	MemberRepository memberRepository;
-	
-	@Autowired 
+
+	@Autowired
 	BooksService booksService;
-	
-	@Autowired 
+
+	@Autowired
 	Converter converter;
-	
-	@GetMapping(path = "/allBooks")
+
+	@GetMapping(path = "/member/allBooks")
 	public @ResponseBody Iterable<BooksDto> getAllBooks() {
 		LOGGER.debug("Returning all books");
 		List<Book> list = booksService.getAllBooks();
@@ -71,126 +71,133 @@ public class LibraryController {
 				BooksDto bookDto = modelMapper.map(itr.next(), BooksDto.class);
 				retList.add(bookDto);
 			}
-			
+
 		} catch (Exception e) {
 			LOGGER.error("Error while returning all the books to the client");
 			e.printStackTrace();
 		}
 		return retList;
 	}
-	
-	@GetMapping(path = "/isbn/{isbn}")
-	public @ResponseBody Iterable<Book> getBooksByISBN(@PathVariable("isbn") Integer isbn) throws BookNotFoundException {
-		
+
+	@GetMapping(path = "/member/isbn/{isbn}")
+	public @ResponseBody Iterable<Book> getBooksByISBN(@PathVariable("isbn") Integer isbn)
+			throws BookNotFoundException {
+
 		LOGGER.debug("Returnbook based on ISBN");
 		Iterable<Book> books = booksRepository.findBooksByISBN(isbn);
-		
-		if(books.iterator().hasNext()) {
+
+		if (books.iterator().hasNext()) {
 			return books;
 		} else {
 			LOGGER.error("Book is not found with isbn {}", isbn);
-			throw new BookNotFoundException("Book not found with isbn "+ isbn);
+			throw new BookNotFoundException("Book not found with isbn " + isbn);
 		}
 	}
-	
-	@GetMapping(path = "/author")
+
+	@GetMapping(path = "/member/author")
 	public @ResponseBody Iterable<Book> getBooksByAuthor(@RequestParam String author) throws BookNotFoundException {
-		
+
 		LOGGER.debug("Fetch book/s of author {}", author);
 		Iterable<Book> books = booksRepository.findBooksByAuthorNative(author);
-		if(books.iterator().hasNext()) {
+		if (books.iterator().hasNext()) {
 			return books;
 		} else {
 			LOGGER.error("Books of author {} are not available", author);
-			throw new BookNotFoundException("Book not found with author "+ author);
+			throw new BookNotFoundException("Book not found with author " + author);
 		}
 	}
-	
-	@GetMapping(path = "/title")
+
+	@GetMapping(path = "/member/title")
 	public @ResponseBody Iterable<Book> getBooksByTitle(@RequestParam String title) throws BookNotFoundException {
-		
+
 		LOGGER.debug("Fetching books with title {}", title);
 		Iterable<Book> books = booksRepository.findBooksByTitleNative(title);
-		if(books.iterator().hasNext()) {
+		if (books.iterator().hasNext()) {
 			return books;
 		} else {
 			LOGGER.error("Books with title {} are not found", title);
-			throw new BookNotFoundException("Book "+ title + " not available.");
+			throw new BookNotFoundException("Book " + title + " not available.");
 		}
 	}
-	
-	@GetMapping(path = "/genre")
+
+	@GetMapping(path = "/member/genre")
 	public @ResponseBody Iterable<Book> getBooksByGenre(@RequestParam String genre) throws BookNotFoundException {
 		LOGGER.debug("Fetching books of genre {}", genre);
 		Iterable<Book> books = booksRepository.findBooksByGenreNative(genre);
-		if(books.iterator().hasNext()) {
+		if (books.iterator().hasNext()) {
 			return books;
 		} else {
 			LOGGER.error("Books of genre {} not found", genre);
-			throw new BookNotFoundException("Book not found with genre "+ genre);
+			throw new BookNotFoundException("Book not found with genre " + genre);
 		}
 	}
-	
-	@GetMapping(path = "/email")
+
+	@GetMapping(path = "/admin/email")
 	public @ResponseBody Member getMemberByEmail(@RequestParam @Email String email) throws MemberNotFoundException {
-		
+
 		LOGGER.debug("Fetching member with email {}", email);
 		Member member = memberRepository.findMemberByEmailNative(email);
-		if(member != null) {
+		if (member != null) {
 			return member;
 		} else {
 			LOGGER.error("Member not found with email {}", email);
-			throw new MemberNotFoundException("Member not found with email "+ email);
+			throw new MemberNotFoundException("Member not found with email " + email);
 		}
 	}
-	
-	@GetMapping(path = "/phone")
-	public @ResponseBody Member getMemberByPhone(@RequestParam @Pattern(regexp="^\\d{10}$") String phone) throws MemberNotFoundException {
-		
+
+	@GetMapping(path = "/admin/phone")
+	public @ResponseBody Member getMemberByPhone(@RequestParam @Pattern(regexp = "^\\d{10}$") String phone)
+			throws MemberNotFoundException {
+
 		Member member = memberRepository.findMemberByPhoneNative(phone);
-		if(member != null) {
+		if (member != null) {
 			return member;
 		} else {
-			throw new MemberNotFoundException("Member not found with phone "+ phone);
+			throw new MemberNotFoundException("Member not found with phone " + phone);
 		}
 	}
-	
-	@GetMapping(path = "/name")
+
+	@GetMapping(path = "/admin/name")
 	public @ResponseBody Member getMemberByName(@RequestParam String name) throws MemberNotFoundException {
-		
+
 		Member member = memberRepository.findMemberByNameNative(name);
-		if(member != null) {
+		if (member != null) {
 			return member;
 		} else {
-			throw new MemberNotFoundException("Member not found with name "+ name);
+			throw new MemberNotFoundException("Member not found with name " + name);
 		}
 	}
-	
-	@PostMapping(path="/addBooks", headers = "Accept=application/json") 
+
+	@PostMapping(path = "/admin/addBooks", headers = "Accept=application/json")
 	@Validated
 	public @ResponseBody List<Book> addNewBook(@RequestBody @Valid ValidList books) {
 		return booksService.saveAllBooks(books);
 	}
-	
-	@PostMapping(path="/addMember", headers = "Accept=application/json") 
+
+	@PostMapping(path = "/addMember", headers = "Accept=application/json")
 	@Validated
-	public @ResponseBody Member addNewMember(@RequestBody @Valid com.library.api.model.Member member) {
-		return booksService.saveMember(member);
+	public @ResponseBody String addNewMember(@RequestBody @Valid com.library.api.model.Member member) {
+
+		booksService.saveMember(member);
+
+		return "Member " + member.getName() + " successfully registered.";
 	}
-	
-	@PostMapping(path="/issueBook", headers = "Accept=application/json") 
+
+	@PostMapping(path = "/admin/issueBook", headers = "Accept=application/json")
 	@Validated
-	public @ResponseBody Issue addIssueBook(@RequestBody @Valid com.library.api.model.Issue issue) throws BookNotAvailableException {
+	public @ResponseBody Issue addIssueBook(@RequestBody @Valid com.library.api.model.Issue issue)
+			throws BookNotAvailableException {
 		return booksService.saveIssue(issue);
 	}
-	
-	@PutMapping(path="/returnBook", headers = "Accept=application/json") 
+
+	@PutMapping(path = "/admin/returnBook", headers = "Accept=application/json")
 	@Validated
-	public @ResponseBody String returnBook(@RequestBody @Valid com.library.api.model.Issue issue) throws BookNotAvailableException {
+	public @ResponseBody String returnBook(@RequestBody @Valid com.library.api.model.Issue issue)
+			throws BookNotAvailableException {
 		return booksService.saveReturnBook(issue);
 	}
-	
-	@GetMapping(path = "/greeting")
+
+	@GetMapping(path = "/member/greeting")
 	public String getGreeting() {
 		return "Welcome to Library Management";
 	}

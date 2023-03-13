@@ -28,7 +28,7 @@ import com.library.api.repository.MemberRepository;
 import com.library.api.repository.QuantityRepository;
 import com.library.api.service.BooksService;
 import com.library.api.service.impl.BooksServiceImpl;
-import com.library.api.utilities.Converter;
+import com.library.api.utils.Converter;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = BooksServiceImpl.class)

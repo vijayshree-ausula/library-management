@@ -14,70 +14,69 @@ import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-@Entity 
+@Entity
 public class Member {
-  @Id
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
-  private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-  private String name;
+	private String name;
 
-  private String address;
+	private String address;
 
-  private String email;
-  
-  private String phone;
-  
-  @ColumnDefault("status")
-  private String status = "Active";
-  
-  public Integer getId() {
-    return id;
-  }
+	private String email;
 
-  public void setId(Integer id) {
-    this.id = id;
-  }
+	private String phone;
 
-  
-  public String getName() {
-	return name;
-}
+	@ColumnDefault("status")
+	private String status = "Active";
 
-public void setName(String name) {
-	this.name = name;
-}
+	public Integer getId() {
+		return id;
+	}
 
-public String getAddress() {
-	return address;
-}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-public void setAddress(String address) {
-	this.address = address;
-}
+	public String getName() {
+		return name;
+	}
 
-public String getEmail() {
-	return email;
-}
+	public void setName(String name) {
+		this.name = name;
+	}
 
-public void setEmail(String email) {
-	this.email = email;
-}
+	public String getAddress() {
+		return address;
+	}
 
-public String getPhone() {
-	return phone;
-}
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
-public void setPhone(String phone) {
-	this.phone = phone;
-}
+	public String getEmail() {
+		return email;
+	}
 
-public String getStatus() {
-	return status;
-}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-public void setStatus(String status) {
-	this.status = status;
-}
- 
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 }

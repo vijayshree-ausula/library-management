@@ -15,6 +15,12 @@ public class Member {
 	@NotNull(message = "Please provide Name.")
 	private String name;
 
+	@NotNull(message = "Please provide User Name.")
+	private String username;
+
+	@NotNull(message = "Please provide Password.")
+	private String password;
+
 	@NotEmpty(message = "Please provide Address.")
 	private String address;
 
@@ -22,9 +28,9 @@ public class Member {
 	@Email
 	private String email;
 
-	@Pattern(regexp="^\\d{10}$")
+	@Pattern(regexp = "^\\d{10}$")
 	private String phone;
-	
+
 	@Value("Active")
 	private String status;
 
@@ -42,6 +48,22 @@ public class Member {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getAddress() {
@@ -76,5 +98,4 @@ public class Member {
 		this.status = status;
 	}
 
-	
 }
